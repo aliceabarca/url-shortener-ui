@@ -8,10 +8,10 @@ export const getUrls = () => {
 export const postUrls = (newUrl) => {
   return fetch('http://localhost:3001/api/v1/urls', {
     method: 'POST',
+    body: JSON.stringify(newUrl),
     headers: {
       "Content-type": "application/json"
-    },
-    body: JSON.stringify(newUrl)
+    }
   })
   .then(response => response.json())
 }

@@ -8,14 +8,19 @@ describe('empty spec', () => {
     cy.intercept('POST', 'http://localhost:3001/api/v1/urls', {
       statusCode: 200,
       body: {
-        title: 'NEW',
-        urlToShorten: 'https://unsplash.com/photos/3DPaL6XDcZE',
+        id: 2,
+        long_url: 'https://www.youtube.com/watch?v=wc7JPaRV5uU',
+        short_url: 'http://localhost:3001/useshorturl/3',
+        title: 'NEW SONG',
       }
     })
     .visit('http://localhost:3000/')
   })
   it('should see home page', () => {
     cy.get('h1').contains('URL Shortener')
+      .get('[placeholder="Title..."]').should('have.attr', 'placeholder', 'Title...')
+      .get('[placeholder="URL to Shorten..."]').should('have.attr', 'placeholder', 'URL to Shorten...')
+
       .get('.url').should('have.length', 2)
       .get('.url').first().contains('Awesome photo')
       .get('.url').first().contains('https://images.unsplash.com/photo-1531898418865-480b7090470f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80')
@@ -31,11 +36,15 @@ describe('empty spec', () => {
     })
 
     it('should add new url', () => {
-      cy.get('[placeholder="Title..."]').type('NEW')
-      .get('[placeholder="URL to Shorten..."]').type('https://unsplash.com/photos/3DPaL6XDcZE')
+      cy.get('[placeholder="Title..."]').type('NEW SONG')
+        .should('have.value', 'NEW SONG')
+      .get('[placeholder="URL to Shorten..."]').type('http://localhost:3001/useshorturl/2')
+      // .get('[placeholder="Title..."]').should('have.value', 'http://localhost:3001/useshorturl/2')
       .get('button').click()
       .get('.url').should('have.length', 3)
-      .get('.url').last().contains('NEW')
-      .get('.url').last().contains('https://unsplash.com/photos/3DPaL6XDcZE')
+      .get('.url').last().contains('NEW SONG')
+      .get('.url').last().contains('http://localhost:3001/useshorturl/3')
+      .get('.url').last().contains('https://www.youtube.com/watch?v=wc7JPaRV5uU')
+
   })
 })
